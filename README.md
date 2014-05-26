@@ -2,7 +2,7 @@
 
 *[nanoc](http://nanoc.ws/)* is a popular *static site generator*.
 
-I'll add some little extensions for *nanoc<* here.
+I'll add some little extensions for *nanoc* here.
 
 ## filters
 

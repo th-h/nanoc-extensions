@@ -2,7 +2,7 @@
 
 *[nanoc](http://nanoc.ws/)* is a popular *static site generator*.
 
-I'll add some little extensions for *nanoc* here.
+I'll add some little extensions for *nanoc* (v3) here.
 
 ## filters
 
@@ -34,3 +34,14 @@ from being rendered and compiled, i.e. like this:
     route %r{/_} do
       nil
     end
+
+### dejure.rb
+
+*nanoc* filter implementation of the *dejure.org*
+[legal integration service](https://dejure.org/vernetzung.html).
+
+    filter :dejure,
+      format: 'weit',
+      buzer: 1,
+      target: '_blank',
+      class: 'dejure'

@@ -33,15 +33,36 @@
 # params[:buzer]  -> fallback to buzer.de?  (1)
 
 require 'net/http'
+require 'digest'
 
 module Nanoc::Filters
-  class DeJureIntegrator < Nanoc::Filter
+  class DejureIntegrator < Nanoc::Filter
   	identifier :dejure
   	type :text
 
+    VERSION   = '0.2'
+    CACHEDIR  = 'tmp/dejure-org'
+    CACHEDAYS = 4
+
+    def run(input, params={})
+      if !(/§|&sect;|Art\.|\/[0-9][0-9](?![0-9\/])| [0-9][0-9]?[\/\.][0-9][0-9](?![0-9\.])|[0-9][0-9], / =~ input)
+        # nothing to replace
+        return input
+      end
+      # return output if it's already cached
+      if !(output = cache_read(input.strip))
+        # purge cache if a purge is due
+        puts "DejureIntegrator cache purged!\n" if cache_purge
+        # call out to dejure.org
+        output = call_dejure(input.strip, set_params(params))
+      end
+      # do an integrity check
+      return integrity_check(input,output)
+    end
+
     def set_params (params)
       # set default params
-      params[:version]            = '0.1'
+      params[:version]            = VERSION
       if !@config[:base_url].nil?
         params[:Anbieterkennung]  = @config[:base_url]
       else
@@ -52,17 +73,7 @@ module Nanoc::Filters
       return params
     end
 
-    def run(content, params={})
-      if !(/§|&sect;|Art\.|\/[0-9][0-9](?![0-9\/])| [0-9][0-9]?[\/\.][0-9][0-9](?![0-9\.])|[0-9][0-9], / =~ content)
-        # nothing to replace
-        return content
-      else
-        params = set_params(params)
-        return DeJureIntegrator(content.strip, params)
-      end
-    end
-
-    def DeJureIntegrator (text, params={})
+    def call_dejure (input, params={})
       prot = 'http://'
       host = 'rechtsnetz.dejure.org'
       path = '/dienste/vernetzung/vernetzen'
@@ -70,35 +81,86 @@ module Nanoc::Filters
 
       http     = Net::HTTP.new(uri.host, uri.port)
       request  = Net::HTTP::Post.new(uri.request_uri)
-      request['User-Agent']   = params[:Anbieterkennung] + ' (DeJureIntegrator for nanoc ruby-' + params[:version] + ')'
+      request['User-Agent']   = params[:Anbieterkennung] + ' (DejureIntegrator for nanoc ruby-' + params[:version] + ')'
       request['Content-Type'] = 'application/x-www-form-urlencoded'
 
       formdata = params
-      formdata['Originaltext'] = text
+      formdata['Originaltext'] = input
       request.set_form_data(formdata)
 
       response = http.request(request)
 
-      if (response.code != '200')  || response.body.nil? || (text.length > response.body.length)
+      if (response.code != '200')  || response.body.nil? || (input.length > response.body.length)
         # HTTP error, empty body or response body smaller than original text
-        printf("DeJureIntegrator HTTP error: %s\n", response.code)
-        return text
+        printf("DejureIntegrator HTTP error: %s\n", response.code)
+        return input
       else
-        return IntegrityCheck(text,response.body.force_encoding('UTF-8'))
+        output = response.body.force_encoding('UTF-8').strip
+        # write cache
+        cache_write(input,output)
+        return output
       end
     end
 
-  def IntegrityCheck (input,output)
-    # compare input and output text after removing all added links - texts should match!
-    regexp = /<a href="http:\/\/dejure.org\/[^>]*>([^<]*)<\/a>/i
-    if input.strip.gsub(regexp, '\\1') == output.strip.gsub(regexp, '\\1')
-      return output
-    else
-      # texts don't match 
-      puts "DeJureIntegrator integrity error\n"
-      return input
+    def cache_filename (input)
+      # filename is created from length and MD5 of input;
+      return input.length.to_s + Digest::MD5.hexdigest(input)
     end
-  end
+ 
+     def cache_age (cache_days)
+      return (Time.now.to_i - cache_days*86400)
+    end
+  
+    def cache_write (input,output,cache_dir=CACHEDIR)
+      # create cache_dir, if necessary
+      Dir.mkdir(cache_dir) if !File.exist?(cache_dir)
+      # write output to cache file
+      cache_file = cache_dir + '/' + cache_filename(input)
+      if File.directory?(cache_dir)
+        File.open(cache_file, 'w') do |f|
+          f.write(output)
+        end
+      end
+    end
+
+    def cache_read (input,cache_days=CACHEDAYS,cache_dir=CACHEDIR)
+      cache_file = cache_dir + '/' + cache_filename(input)
+      # file exists and is younger than cache_days?
+      if File.exist?(cache_file) && File.mtime(cache_file).to_i > cache_age(cache_days)
+        return File.read(cache_file)
+      else
+        return false
+      end
+    end
+
+    def cache_purge (cache_days=CACHEDAYS,cache_dir=CACHEDIR)
+      # cache_dir is not a directory?
+      return false if !File.directory?(cache_dir)
+      lastpurge = File.read(cache_dir + '/lastpurge') if File.exist?(cache_dir + '/lastpurge')
+      # already purged in the last cache_days days?
+      return false if lastpurge && lastpurge.to_i > cache_age(cache_days)
+      # delete all files in cache_dir older than cache_days
+      Pathname.new(cache_dir).children.each do |f|
+        f.unlink if File.mtime(f).to_i < cache_age(cache_days)
+      end
+      # save the time of the purge
+      File.open(cache_dir + '/lastpurge', 'w') do |f|
+        f.write(Time.now.to_i)
+      end
+      return true
+    end
+
+    def integrity_check (input,output)
+      # compare input and output text after removing all added links - texts should match!
+      regexp = /<a href="http:\/\/dejure.org\/[^>]*>([^<]*)<\/a>/i
+      if input.strip.gsub(regexp, '\\1') == output.strip.gsub(regexp, '\\1')
+        return output
+      else
+        # texts don't match 
+        puts "DejureIntegrator integrity error!\n"
+        return input
+      end
+    end
 
   end
 end

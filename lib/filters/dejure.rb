@@ -113,7 +113,7 @@ module Nanoc::Filters
   
     def cache_write (input,output,cache_dir=CACHEDIR)
       # create cache_dir, if necessary
-      Dir.mkdir(cache_dir) if !File.exist?(cache_dir)
+      FileUtils.mkdir_p(cache_dir) if !File.exist?(cache_dir)
       # write output to cache file
       cache_file = cache_dir + '/' + cache_filename(input)
       if File.directory?(cache_dir)

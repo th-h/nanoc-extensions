@@ -1,8 +1,8 @@
 # dejure.rb
-# a nanoc filter for dejure.org legal integration service
-# see <https://dejure.org/vernetzung.html>
+# A nanoc filter for the dejure.org legal integration service
+# See <https://dejure.org/vernetzung.html>
 #
-# adapted from PHP reference implementation
+# Adapted from the PHP reference implementation
 # at <https://dejure.org/vernetzung/vernetzungsfunktion.zip>
 #
 # (c) 2017 Thomas Hochstein <thh@inter.net>
@@ -40,9 +40,9 @@ module Nanoc::Filters
   	identifier :dejure
   	type :text
 
-    VERSION   = '0.2'
+    VERSION   = '0.3-beta'
     CACHEDIR  = 'tmp/dejure-org'
-    CACHEDAYS = 4
+    CACHEDAYS = 7
 
     def run(input, params={})
       if !(/§|&sect;|Art\.|\/[0-9][0-9](?![0-9\/])| [0-9][0-9]?[\/\.][0-9][0-9](?![0-9\.])|[0-9][0-9], / =~ input)

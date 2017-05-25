@@ -41,7 +41,7 @@ module Nanoc::Filters
   	identifier :dejure
   	type :text
 
-    VERSION   = '0.3-beta'
+    VERSION   = '0.3'
     CACHEDIR  = 'tmp/dejure-org'
     CACHEDAYS = 7
 
@@ -50,6 +50,8 @@ module Nanoc::Filters
         # nothing to replace
         return input
       end
+      # return if input contains '<!-- no-dejure -->'
+      return input if (/<!-- ?no-?dejure ?-->/ =~ input)
       # set cache validity in days from params or set a default
       cache_days = params.delete(:cache_days)
       if cache_days.nil?

@@ -2,6 +2,10 @@
 
 ## 1.x branch
 
+### Version 1.1-beta (unreleased)
+
+* Fix markdown errors in changelog.
+
 ### Version 1.0 (2017-05-25)
 
 * Relase version 1.0.
@@ -11,8 +15,8 @@
 
 ### Version 0.3 (2017-05-25)
 
-* Enable opt-out by adding '<!-- no-dejure -->' somewhere on the page.
-* Save space by caching just '<!-- idem -->' for unchanged texts.
+* Enable opt-out by adding `<!-- no-dejure -->` somewhere on the page.
+* Save space by caching just `<!-- idem -->` for unchanged texts.
 * Change protocol to https.
 * Make cache validity configurable.
 * Rename from "DejureIntegrator" to "DejureAutolinker".

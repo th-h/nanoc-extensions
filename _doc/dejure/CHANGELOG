@@ -1,0 +1,19 @@
+# Changelog for nanoc-dejure
+
+## 0.x branch
+
+### Version 0.3 (unreleased)
+
+* Make cache validity configurable.
+* Rename from "DejureIntegrator" to "DejureAutolinker".
+* Create cache dir recursively.
+* Change default cache validity to 7 days.
+
+### Version 0.2 (2017-04-29)
+
+* Add caching.
+* Rename from "DeJureIntegrator" to "DejureIntegrator".
+
+### Version 0.1 (2017-04-29)
+
+* First implementation.

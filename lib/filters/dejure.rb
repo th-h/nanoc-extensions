@@ -46,17 +46,13 @@ module Nanoc::Filters
     CACHEDAYS = 7
 
     def run(input, params={})
-      if !(/§|&sect;|Art\.|\/[0-9][0-9](?![0-9\/])| [0-9][0-9]?[\/\.][0-9][0-9](?![0-9\.])|[0-9][0-9], / =~ input)
-        # nothing to replace
-        return input
-      end
-      # return if input contains '<!-- no-dejure -->'
+      # return input if there's nothing to replace
+      return input if !(/§|&sect;|Art\.|\/[0-9][0-9](?![0-9\/])| [0-9][0-9]?[\/\.][0-9][0-9](?![0-9\.])|[0-9][0-9], / =~ input)
+      # return input if it contains '<!-- no-dejure -->'
       return input if (/<!-- ?no-?dejure ?-->/ =~ input)
       # set cache validity in days from params or set a default
       cache_days = params.delete(:cache_days)
-      if cache_days.nil?
-        cache_days = CACHEDAYS
-      end
+      cache_days = CACHEDAYS if cache_days.nil?
       # return output if it's already cached
       if !(output = cache_read(input.strip,cache_days))
         # purge cache if a purge is due

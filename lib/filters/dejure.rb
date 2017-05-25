@@ -27,10 +27,11 @@
 # 
 #
 # params may be set as follows:
-# params[:format] -> [weit|schmal]          (weit)
-# params[:target] -> target for <a href>    ('')
-# params[:class]  -> CSS class for <a href> ('')
-# params[:buzer]  -> fallback to buzer.de?  (1)
+# params[:format]      -> [weit|schmal]          (weit)
+# params[:buzer]       -> fallback to buzer.de?  (1)
+# params[:target]      -> target for <a href>    ('')
+# params[:class]       -> CSS class for <a href> ('')
+# params[:cache_days]  -> cache validity in days (7)
 
 require 'net/http'
 require 'digest'
@@ -49,10 +50,15 @@ module Nanoc::Filters
         # nothing to replace
         return input
       end
+      # set cache validity in days from params or set a default
+      cache_days = params.delete(:cache_days)
+      if cache_days.nil?
+        cache_days = CACHEDAYS
+      end
       # return output if it's already cached
-      if !(output = cache_read(input.strip))
+      if !(output = cache_read(input.strip,cache_days))
         # purge cache if a purge is due
-        puts "DejureAutolinker cache purged!\n" if cache_purge
+        puts "DejureAutolinker cache purged!\n" if cache_purge(cache_days)
         # call out to dejure.org
         output = call_dejure(input.strip, set_params(params))
       end

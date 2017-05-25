@@ -1,5 +1,12 @@
 # Changelog for nanoc-dejure
 
+## 1.x branch
+
+### Version 1.0 (2017-05-25)
+
+* Relase version 1.0.
+* Add a README file.
+
 ## 0.x branch
 
 ### Version 0.3 (2017-05-25)

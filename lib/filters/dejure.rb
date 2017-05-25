@@ -36,7 +36,7 @@ require 'net/http'
 require 'digest'
 
 module Nanoc::Filters
-  class DejureIntegrator < Nanoc::Filter
+  class DejureAutolinker < Nanoc::Filter
   	identifier :dejure
   	type :text
 
@@ -52,7 +52,7 @@ module Nanoc::Filters
       # return output if it's already cached
       if !(output = cache_read(input.strip))
         # purge cache if a purge is due
-        puts "DejureIntegrator cache purged!\n" if cache_purge
+        puts "DejureAutolinker cache purged!\n" if cache_purge
         # call out to dejure.org
         output = call_dejure(input.strip, set_params(params))
       end
@@ -81,7 +81,7 @@ module Nanoc::Filters
 
       http     = Net::HTTP.new(uri.host, uri.port)
       request  = Net::HTTP::Post.new(uri.request_uri)
-      request['User-Agent']   = params[:Anbieterkennung] + ' (DejureIntegrator for nanoc ruby-' + params[:version] + ')'
+      request['User-Agent']   = params[:Anbieterkennung] + ' (DejureAutolinker for nanoc ruby-' + params[:version] + ')'
       request['Content-Type'] = 'application/x-www-form-urlencoded'
 
       formdata = params
@@ -92,7 +92,7 @@ module Nanoc::Filters
 
       if (response.code != '200')  || response.body.nil? || (input.length > response.body.length)
         # HTTP error, empty body or response body smaller than original text
-        printf("DejureIntegrator HTTP error: %s\n", response.code)
+        printf("DejureAutolinker HTTP error: %s\n", response.code)
         return input
       else
         output = response.body.force_encoding('UTF-8').strip
@@ -157,7 +157,7 @@ module Nanoc::Filters
         return output
       else
         # texts don't match 
-        puts "DejureIntegrator integrity error!\n"
+        puts "DejureAutolinker integrity error!\n"
         return input
       end
     end

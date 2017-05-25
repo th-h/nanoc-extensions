@@ -4,6 +4,7 @@
 
 ### Version 0.3 (unreleased)
 
+* Change protocol to https.
 * Make cache validity configurable.
 * Rename from "DejureIntegrator" to "DejureAutolinker".
 * Create cache dir recursively.

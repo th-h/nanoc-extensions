@@ -80,12 +80,12 @@ module Nanoc::Filters
     end
 
     def call_dejure (input, params={})
-      prot = 'http://'
+      prot = 'https://'
       host = 'rechtsnetz.dejure.org'
       path = '/dienste/vernetzung/vernetzen'
       uri  = URI(prot + host + path)
 
-      http     = Net::HTTP.new(uri.host, uri.port)
+      http     = Net::HTTP.new(uri.host)
       request  = Net::HTTP::Post.new(uri.request_uri)
       request['User-Agent']   = params[:Anbieterkennung] + ' (DejureAutolinker for nanoc ruby-' + params[:version] + ')'
       request['Content-Type'] = 'application/x-www-form-urlencoded'

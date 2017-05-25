@@ -124,7 +124,13 @@ module Nanoc::Filters
       cache_file = cache_dir + '/' + cache_filename(input)
       if File.directory?(cache_dir)
         File.open(cache_file, 'w') do |f|
-          f.write(output)
+          # if input is unchanged, just save '<!-- idem -->'
+          # instead of the whole (unchanged) text to save space
+          if input == output
+            f.write('<!-- idem -->')
+          else
+            f.write(output)
+          end
         end
       end
     end
@@ -133,7 +139,13 @@ module Nanoc::Filters
       cache_file = cache_dir + '/' + cache_filename(input)
       # file exists and is younger than cache_days?
       if File.exist?(cache_file) && File.mtime(cache_file).to_i > cache_age(cache_days)
-        return File.read(cache_file)
+        output = File.read(cache_file)
+        # if just '<!-- idem -->' is cached, return input unchanged
+        if output == '<!-- idem -->'
+          return input
+        else
+          return output
+        end
       else
         return false
       end

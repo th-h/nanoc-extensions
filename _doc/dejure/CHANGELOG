@@ -4,6 +4,7 @@
 
 ### Version 0.3 (unreleased)
 
+* Save space by caching just '<!-- idem -->' for unchanged texts.
 * Change protocol to https.
 * Make cache validity configurable.
 * Rename from "DejureIntegrator" to "DejureAutolinker".

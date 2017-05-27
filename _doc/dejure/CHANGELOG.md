@@ -4,6 +4,7 @@
 
 ### Version 1.1-beta (unreleased)
 
+* Add option to exclude headings from link generation.
 * Fix markdown errors in changelog.
 
 ### Version 1.0 (2017-05-25)

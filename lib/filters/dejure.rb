@@ -27,11 +27,12 @@
 # 
 #
 # params may be set as follows:
-# params[:format]      -> [weit|schmal]          (weit)
-# params[:buzer]       -> fallback to buzer.de?  (1)
-# params[:target]      -> target for <a href>    ('')
-# params[:class]       -> CSS class for <a href> ('')
-# params[:cache_days]  -> cache validity in days (7)
+# params[:format]      -> [weit|schmal]                (weit)
+# params[:buzer]       -> fallback to buzer.de?        (1)
+# params[:noheadings]  -> exclude headings from linker (0)
+# params[:target]      -> target for <a href>          ('')
+# params[:class]       -> CSS class for <a href>       ('')
+# params[:cache_days]  -> cache validity in days       (7)
 
 require 'net/http'
 require 'digest'
@@ -70,10 +71,11 @@ module Nanoc::Filters
       if !@config[:base_url].nil?
         params[:Anbieterkennung]  = @config[:base_url]
       else
-        params[:Anbieterkennung] = 'http://unknown.nanoc.installation.invalid'
+        params[:Anbieterkennung]  = 'http://unknown.nanoc.installation.invalid'
       end
       params[:format]           ||= 'weit'
       params[:buzer]            ||= 1
+      params[:ohnehtags]          = params.delete(:noheadings)
       return params
     end
 

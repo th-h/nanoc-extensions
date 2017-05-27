@@ -42,7 +42,7 @@ module Nanoc::Filters
   	identifier :dejure
   	type :text
 
-    VERSION   = '1.1'
+    VERSION   = '1.2-beta'
     CACHEDIR  = 'tmp/dejure-org'
     CACHEDAYS = 7
 
@@ -76,6 +76,7 @@ module Nanoc::Filters
       params[:format]           ||= 'weit'
       params[:buzer]            ||= 1
       params[:ohnehtags]          = params.delete(:noheadings)
+      params[:Schema]             = 'https'
       return params
     end
 
@@ -91,7 +92,7 @@ module Nanoc::Filters
       request['Content-Type'] = 'application/x-www-form-urlencoded'
 
       formdata = params
-      formdata['Originaltext'] = input
+      formdata[:Originaltext] = input
       request.set_form_data(formdata)
 
       response = http.request(request)
@@ -170,7 +171,7 @@ module Nanoc::Filters
 
     def integrity_check (input,output)
       # compare input and output text after removing all added links - texts should match!
-      regexp = /<a href="http:\/\/dejure.org\/[^>]*>([^<]*)<\/a>/i
+      regexp = /<a href="https?:\/\/dejure.org\/[^>]*>([^<]*)<\/a>/i
       if input.strip.gsub(regexp, '\\1') == output.strip.gsub(regexp, '\\1')
         return output
       else

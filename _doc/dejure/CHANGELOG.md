@@ -2,6 +2,10 @@
 
 ## 1.x branch
 
+### Version 1.2 (unreleased)
+
+* Create links with `https` protocol.
+
 ### Version 1.1 (2017-05-27)
 
 * Add option to exclude headings from link generation.

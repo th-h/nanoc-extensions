@@ -42,7 +42,7 @@ module Nanoc::Filters
   	identifier :dejure
   	type :text
 
-    VERSION   = '1.1-beta'
+    VERSION   = '1.1'
     CACHEDIR  = 'tmp/dejure-org'
     CACHEDAYS = 7
 

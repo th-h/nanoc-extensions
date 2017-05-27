@@ -43,5 +43,6 @@ from being rendered and compiled, i.e. like this:
     filter :dejure,
       format: 'weit',
       buzer: 1,
+      noheadings: 0,
       target: '_blank',
       class: 'dejure'

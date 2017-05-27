@@ -2,7 +2,7 @@
 
 ## 1.x branch
 
-### Version 1.1-beta (unreleased)
+### Version 1.1 (2017-05-27)
 
 * Add option to exclude headings from link generation.
 * Fix markdown errors in changelog.

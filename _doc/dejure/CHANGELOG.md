@@ -5,6 +5,7 @@
 ### Version 1.2 (unreleased)
 
 * Create links with `https` protocol.
+* Nanoc 4.x compatibility
 
 ### Version 1.1 (2017-05-27)
 

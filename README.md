@@ -1,14 +1,14 @@
 # nanoc extensions
 
-*[nanoc](http://nanoc.ws/)* is a popular *static site generator*.
+*[Nanoc](http://nanoc.ws/)* is a popular *static site generator*.
 
-I'll add some little extensions for *nanoc* (v3) here.
+I'll add some little extensions for *Nanoc* here.
 
 ## filters
 
 ### abbreviations.rb
 
-Simple *nanoc* filter to add `<abbr>` tags.
+Simple *Nanoc* filter to add `<abbr>` tags.
 
 After reading a YAML document from `/content/_data/abbreviations.yam`,
 all occurences of each $abbrev are replaced by a
@@ -37,7 +37,7 @@ from being rendered and compiled, i.e. like this:
 
 ### dejure.rb
 
-*nanoc* filter implementation of the *dejure.org*
+*Nanoc* filter implementation of the *dejure.org*
 [legal integration service](https://dejure.org/vernetzung.html).
 
     filter :dejure,

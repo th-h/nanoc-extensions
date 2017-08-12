@@ -46,11 +46,13 @@ module Nanoc::Filters
     CACHEDIR  = 'tmp/dejure-org'
     CACHEDAYS = 7
 
-    def run(input, params={})
+    def run(input, filterparams={})
       # return input if there's nothing to replace
       return input if !(/§|&sect;|Art\.|\/[0-9][0-9](?![0-9\/])| [0-9][0-9]?[\/\.][0-9][0-9](?![0-9\.])|[0-9][0-9], / =~ input)
       # return input if it contains '<!-- no-dejure -->'
       return input if (/<!-- ?no-?dejure ?-->/ =~ input)
+      # copy params (which are now immutable)
+      params = filterparams.dup
       # set cache validity in days from params or set a default
       cache_days = params.delete(:cache_days)
       cache_days = CACHEDAYS if cache_days.nil?

@@ -46,3 +46,5 @@ from being rendered and compiled, i.e. like this:
       noheadings: 0,
       target: '_blank',
       class: 'dejure'
+
+Please see the [distribution page](https://th-h.de/net/software/nanoc-dejure/) (in German).

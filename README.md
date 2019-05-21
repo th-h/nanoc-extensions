@@ -10,7 +10,7 @@ I'll add some little extensions for *Nanoc* here.
 
 Simple *Nanoc* filter to add `<abbr>` tags.
 
-After reading a YAML document from `/content/_data/abbreviations.yam`,
+After reading a YAML document from `/content/_data/abbreviations.yaml`,
 all occurences of each $abbrev are replaced by a
 `<abbr title="$abbrev">$fulltext</abbr>` construct.
 
@@ -22,7 +22,7 @@ look like this:
     ---
 	  abbreviations:
 	  - abbrev: HTML
-      fulltext: HyperText Markup Language
+        fulltext: HyperText Markup Language
 
 You'll need a (compile and) routing rule to stop the `abbreviations.yaml`
 from being rendered and compiled, i.e. like this:
@@ -47,4 +47,5 @@ from being rendered and compiled, i.e. like this:
       target: '_blank',
       class: 'dejure'
 
-Please see the [distribution page](https://th-h.de/net/software/nanoc-dejure/) (in German).
+Please see the [distribution page](https://th-h.de/net/software/nanoc-dejure/)
+(in German) or the README file in the `_doc/dejure/` directory.

@@ -5,7 +5,7 @@
 # Adapted from the PHP reference implementation
 # at <https://dejure.org/vernetzung/vernetzungsfunktion.zip>
 #
-# (c) 2017 Thomas Hochstein <thh@inter.net>
+# (c) 2017 Thomas Hochstein <thh@thh.name>
 #
 # Permission is hereby granted, free of charge, to any person obtaining a copy
 # of this software and associated documentation files (the "Software"), to deal

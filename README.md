@@ -1,6 +1,6 @@
 # nanoc extensions
 
-*[Nanoc](http://nanoc.ws/)* is a popular *static site generator*.
+*[Nanoc](http://nanoc.app/)* is a popular *static site generator*.
 
 I'll add some little extensions for *Nanoc* here.
 
